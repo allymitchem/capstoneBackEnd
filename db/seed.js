@@ -1,4 +1,4 @@
-const {client} = require('./client');
+const client = require('./client');
 
 async function dropTables() {
     try{
@@ -9,6 +9,7 @@ async function dropTables() {
             DROP TABLE IF EXISTS user;
             DROP TABLE IF EXISTS item;
         `)
+        console.log("Finished Dropping All Tables...")
     }catch (error) {
         throw error;
     }
@@ -26,32 +27,22 @@ async function createTables(){
         description TEXT NOT NULL,
         genre VARCHAR(255) NOT NULL,
         price INTEGER
-       )
-       ;`)
-
-       await client.query(`
+       );
        CREATE TABLE user(
-        id SERIAL PRIMARY KEY,
-       )
-       ;`)
-
-       await client.query(`
+        id SERIAL PRIMARY KEY
+       );
        CREATE TABLE cart(
         id SERIAL PRIMARY KEY,
         "userId" INTEGER REFERENCES user(id)
-       )
-       ;`)
-
-       await client.query(`
+       );
        CREATE TABLE cart_item(
         id SERIAL PRIMARY KEY,
-        "cartId" INTEGER REFERENCES cart(id)
-        "itemId" INTEGER REFERENCES item(id)
-        quantity INTEGER
+        "cartId" INTEGER REFERENCES cart(id),
+        "itemId" INTEGER REFERENCES item(id),
+        quantity INTEGER,
         UNIQUE ("cartId", "itemId")
-       )
-       ;`)
-
+       );
+       `)
         console.log("Finished building tables!")
     }catch (error) {
         console.log("Error building tables!")

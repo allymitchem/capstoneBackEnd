@@ -10,7 +10,7 @@
     "start": "node index.js",
     "start:dev": "nodemon index.js"
   },
-  "author": "Forrest Joe Leonardo",
+  "author": "Forrest Kaylan Allyson Andrew",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
