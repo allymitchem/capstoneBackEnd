@@ -24,9 +24,11 @@ async function createUser({
     const { rows: [user] } = await client.query(`
       INSERT INTO users(username, password, email)
       VALUES($1, $2, $3)
-      ON CONFLICT (username, email) DO NOTHING
+      ON CONFLICT (username) DO NOTHING
       RETURNING *;
     `, [username, password, email])
+   
+    return user
   } catch (error) {
     console.error(error)
     throw error;
@@ -60,5 +62,6 @@ async function updateUser(id, fields = {}) {
 
 module.exports = {
   getAllUsers,
-  createUser
+  createUser,
+  updateUser
 }
