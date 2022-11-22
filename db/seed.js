@@ -1,5 +1,7 @@
 const client = require('./client');
-const {addBook} = require('./')
+const {addBook, getAllBooks, getBooksByAuthor, getBookByTitle, getBookById} = require('./');
+const { fs } = require('file-system');
+const csvParser = require('csv-parser');
 
 async function dropTables() {
     try{
@@ -63,38 +65,42 @@ async function populateItems() {
         price: 1000, 
         year: 1950
     })
+    await addBook({
+        title: "green eggs and ham", 
+        author: "dr. suess", 
+        description: "test test test", 
+        price: 800, 
+        year: 1930
+    })
+    await addBook({
+        title: "a different book", 
+        author: "someone", 
+        description: "test test test", 
+        price: 800, 
+        year: 1930
+    })
 }
+const books = [];
 
 async function populateItemsfromCSV() {
     console.log('Starting to populate books');
-
-    const csv = require('csv-parser')
-    const fs = require('file-system')
+    let stop = false
     const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-    const books = [];
-
-    fs.createReadStream('./db/goodreads_library_export.csv')
-      .pipe(csv())
-      .on('data', (data) => {
-        books.push(data)})
-      .on('end', () => {
-          const bookPromises = books.map(elem => {
-              console.log('*in the map');
-              addBook({
-                  title: elem.Title,
-                  author: elem.Author,
-                  description: lorem,
-                  price: Math.floor(Math.random()*1001)+1,
-                  year: Number(elem['Original Publication Year'])
-              })
-            })
-            Promise.all(bookPromises)
-            console.log(bookPromises);
+    const csv = require('csv-parser')
+    const stream = fs.createReadStream('./db/goodreads_library_export.csv').pipe(csv())
+      .on('data', async (data) => {
+        books.push(data)
         })
-        
-
-
-    console.log('Finished populating books');
+      .on('finish', () => {console.log(performance.now(), console.log(books), "THE STREAM HAS ENDED")})
+       const bookadded = await Promise.all(books.map((data)=> addBook({
+            title: data.Title,
+            author: data.Author,
+            description: lorem,
+            price: Math.floor(Math.random()*1001)+1,
+            year: Number(data['Original Publication Year'])
+    
+        })))
+    console.log(performance.now(),bookadded,'Finished populating books');
 }
 
 
@@ -103,7 +109,8 @@ async function rebuildDB(){
         client.connect();
         await dropTables()
         await createTables()
-        await populateItemsfromCSV()
+        // await populateItemsfromCSV()
+        await populateItems()
         
 
     } catch(error){
@@ -116,6 +123,18 @@ async function testDB() {
     try {
         console.log("Starting to test database...")
 
+        const allBooks = await getAllBooks()
+        console.log("all books:",allBooks);
+        
+        const someBooks = await getBooksByAuthor("dr. suess")
+        console.log("some books:",someBooks);
+        
+        const singleBook = await getBookByTitle('red fish blue fish')
+        console.log("book titled red fish blue fish:",singleBook);
+
+        const book3 = await getBookById(3)
+        console.log("book number 3", book3);
+
     } catch (error) {
         console.error(error);
         throw error;
@@ -123,6 +142,6 @@ async function testDB() {
 }
 
 rebuildDB()
-.then(testDB())
+.then(testDB)
 .catch(console.error)
 .finally(() => client.end());
