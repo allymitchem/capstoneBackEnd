@@ -56,6 +56,16 @@ async function createTables(){
 }
 
 async function populateItems() {
+    await addBook({
+        title: "red fish blue fish", 
+        author: "dr. suess", 
+        description: "test test test", 
+        price: 1000, 
+        year: 1950
+    })
+}
+
+async function populateItemsfromCSV() {
     console.log('Starting to populate books');
 
     const csv = require('csv-parser')
@@ -77,11 +87,10 @@ async function populateItems() {
                   price: Math.floor(Math.random()*1001)+1,
                   year: Number(elem['Original Publication Year'])
               })
-          })
-
+            })
+            Promise.all(bookPromises)
+            console.log(bookPromises);
         })
-        Promise.all(bookPromises)
-        console.log(bookPromises);
         
 
 
@@ -94,7 +103,7 @@ async function rebuildDB(){
         client.connect();
         await dropTables()
         await createTables()
-        await populateItems()
+        await populateItemsfromCSV()
         
 
     } catch(error){
