@@ -1,4 +1,5 @@
 const client = require('./client');
+const {addBook} = require('./')
 
 async function dropTables() {
     try{
@@ -27,8 +28,8 @@ async function createTables(){
             title VARCHAR(255) UNIQUE NOT NULL,
             author VARCHAR(255) NOT NULL,
             description TEXT NOT NULL,
-            genre VARCHAR(255) NOT NULL,
-            price INTEGER
+            year INTEGER,
+            price INTEGER NOT NULL
         );
         CREATE TABLE users(
             id SERIAL PRIMARY KEY,
@@ -54,12 +55,55 @@ async function createTables(){
     }
 }
 
+async function populateItems() {
+    await addBook({
+        title: "red fish blue fish", 
+        author: "dr. suess", 
+        description: "test test test", 
+        price: 1000, 
+        year: 1950
+    })
+}
+
+async function populateItemsfromCSV() {
+    console.log('Starting to populate books');
+
+    const csv = require('csv-parser')
+    const fs = require('file-system')
+    const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+    const books = [];
+
+    fs.createReadStream('./db/goodreads_library_export.csv')
+      .pipe(csv())
+      .on('data', (data) => {
+        books.push(data)})
+      .on('end', () => {
+          const bookPromises = books.map(elem => {
+              console.log('*in the map');
+              addBook({
+                  title: elem.Title,
+                  author: elem.Author,
+                  description: lorem,
+                  price: Math.floor(Math.random()*1001)+1,
+                  year: Number(elem['Original Publication Year'])
+              })
+            })
+            Promise.all(bookPromises)
+            console.log(bookPromises);
+        })
+        
+
+
+    console.log('Finished populating books');
+}
+
 
 async function rebuildDB(){
     try{
         client.connect();
         await dropTables()
         await createTables()
+        await populateItemsfromCSV()
         
 
     } catch(error){
@@ -79,6 +123,6 @@ async function testDB() {
 }
 
 rebuildDB()
-.then(testDB)
+.then(testDB())
 .catch(console.error)
 .finally(() => client.end());
