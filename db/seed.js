@@ -1,5 +1,6 @@
 const client = require('./client');
 const {addBook} = require('./')
+const { getAllUsers,createUser,updateUser} = require('./users')
 
 async function dropTables() {
     try{
@@ -57,6 +58,22 @@ async function createTables(){
     }
 }
 
+async function createInitialUsers(){
+    console.log("Starting to create initial user")
+    try{
+    const john = await createUser ({
+        username: "JohnDoe",
+        password: "doeboy",
+        email: "johndoe@gmail.com"
+    })
+    console.log("Finished creating initial user!")
+    } catch(error){
+        console.error(error)
+        throw error
+
+    }
+}
+
 async function populateItems() {
     await addBook({
         title: "red fish blue fish", 
@@ -106,6 +123,7 @@ async function rebuildDB(){
         await dropTables()
         await createTables()
         await populateItemsfromCSV()
+        await createInitialUsers()
         
 
     } catch(error){
