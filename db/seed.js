@@ -1,7 +1,10 @@
 const client = require('./client');
 const {addBook, getAllBooks, getBooksByAuthor, getBookByTitle, getBookById} = require('./');
+const { getAllUsers,createUser,updateUser} = require('./users')
 const { fs } = require('file-system');
 const csvParser = require('csv-parser');
+
+
 
 async function dropTables() {
     try{
@@ -35,7 +38,9 @@ async function createTables(){
         );
         CREATE TABLE users(
             id SERIAL PRIMARY KEY,
-            username VARCHAR(255) UNIQUE NOT NULL
+            username VARCHAR(255) UNIQUE NOT NULL,
+            password VARCHAR(255) NOT NULL,
+            email VARCHAR(255) UNIQUE NOT NULL
         );
         CREATE TABLE carts(
             id SERIAL PRIMARY KEY,
@@ -54,6 +59,22 @@ async function createTables(){
     }catch (error) {
         console.log("Error building tables!")
         throw error;
+    }
+}
+
+async function createInitialUsers(){
+    console.log("Starting to create initial user")
+    try{
+    const john = await createUser ({
+        username: "JohnDoe",
+        password: "doeboy",
+        email: "johndoe@gmail.com"
+    })
+    console.log("Finished creating initial user!")
+    } catch(error){
+        console.error(error)
+        throw error
+
     }
 }
 
@@ -111,6 +132,7 @@ async function rebuildDB(){
         await createTables()
         // await populateItemsfromCSV()
         await populateItems()
+        await createInitialUsers()
         
 
     } catch(error){
