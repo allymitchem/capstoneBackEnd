@@ -11,6 +11,8 @@ itemsRouter.get("", async (req, res, next) => {
   }
     
 })
+
+
 itemsRouter.get("/:itemId", async (req, res, next) => {
     
     try {
@@ -30,9 +32,15 @@ itemsRouter.get("/:itemId", async (req, res, next) => {
     }
 })
 
-itemsRouter.post("", (req, res, next) => {
-    const {title, author, description, price, year, numInStock} = req.body 
-    console.log("we're in adding a book")
+itemsRouter.post("", async (req, res, next) => {
+    try {
+        const {title, author, description, price, year, numInStock} = req.body 
+        const addedBook = await addBook({title, author, description, price, year, numInStock})
+        res.send(addedBook)
+        
+    } catch ({error, name, message}) {
+        next({error, name, message})
+    }
 })
 
 
