@@ -1,5 +1,5 @@
 function requireUser(req, res, next) {
-    if (!req.user){
+  if (!req.user){
       res.statusCode = 401
       res.send({
         error: "401",
