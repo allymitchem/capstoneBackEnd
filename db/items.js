@@ -76,6 +76,23 @@ async function getBookByTitle(title) {
     }
 }
 
+async function updateBook({id, ...fields}) {
+    const setString = Object.keys(fields).map((key, index) => `"${key}"=$${index + 1}`).join(', ');
+    try {
+        const {rows: [book]} = await client.query(`
+        UPDATE items
+        SET ${setString}
+        WHERE id=${id}
+        RETURNING *;
+        `, Object.values(fields));
+    } catch (error) {
+        console.error(error)
+        
+    } 
+
+
+}
+
 
 
 module.exports = {
@@ -84,5 +101,6 @@ module.exports = {
     getAllBooks,
     getBookById,
     getBooksByAuthor,
-    getBookByTitle
+    getBookByTitle,
+    updateBook
 };

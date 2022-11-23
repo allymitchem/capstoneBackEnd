@@ -1,5 +1,5 @@
 const client = require('./client');
-const {addBook, getAllBooks, getBooksByAuthor, getBookByTitle, getBookById} = require('./');
+const {addBook, getAllBooks, getBooksByAuthor, getBookByTitle, getBookById, updateBook} = require('./');
 const { getAllUsers,createUser,updateUser} = require('./users')
 
 
@@ -139,6 +139,10 @@ async function testDB() {
 
         const book3 = await getBookById(3)
         console.log("book number 3", book3);
+
+        await updateBook({id: 3, author:"another guy"})
+        const newBook3= await getBookById(3)
+        console.log(newBook3, "this is updated book 3")
 
     } catch (error) {
         console.error(error);
