@@ -23,7 +23,27 @@ server.use((req, res, next) => {
 const apiRouter = require("./api");
 server.use('/api', apiRouter);
 
-const {client} = require('./db');
+server.use("*", (req, res)=> {
+    res.status(404).send({
+        error: "404 not found",
+        message: "no route found for the requested url"
+    })
+
+})
+
+server.use((error, req, res, next) => {
+    if (res.statusCode < 400) {
+        res.status(500)
+    }
+    res.send({
+        error: error.error,
+        name: error.name,
+        message: error.message
+    })
+})
+
+const client = require('./db/client');
+console.log(typeof(client))
 client.connect();
 
 server.listen(PORT, () => {
