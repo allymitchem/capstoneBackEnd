@@ -9,7 +9,7 @@ async function getAllUsers() {
     FROM users;
     `
     );
-    console.log(rows, "this is all users");
+    // console.log(user, "this is all users");
     return rows;
   } catch (error) {
     console.error(error);
@@ -43,6 +43,7 @@ async function createUser({ username, password, email }) {
 }
 
 async function updateUser(id, fields = {}) {
+  console.log("I am in updateUser function", fields)
   const setString = Object.keys(fields)
     .map((key, index) => `"${key}"=$${index + 1}`)
     .join(", ");
@@ -64,7 +65,7 @@ async function updateUser(id, fields = {}) {
       `,
       Object.values(fields)
     );
-
+      console.log(user)
     return user;
   } catch (error) {
     throw error;

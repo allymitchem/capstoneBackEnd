@@ -1,6 +1,7 @@
 const client = require('./client');
 const {addBook, getAllBooks, getBooksByAuthor, getBookByTitle, getBookById} = require('./');
-const { getAllUsers,createUser,updateUser} = require('./users')
+const { getAllUsers,createUser, getUserByUsername,
+    getUser, getUserByUserId, updateUser} = require('./users')
 const { fs } = require('file-system');
 const csvParser = require('csv-parser');
 
@@ -70,6 +71,12 @@ async function createInitialUsers(){
         password: "doeboy",
         email: "johndoe@gmail.com"
     })
+    const jane = await createUser({
+        username: "JaneDoe",
+        password: "doegirl",
+        email: "janedoe@yahoo.com"
+    })
+
     console.log("Finished creating initial user!")
     } catch(error){
         console.error(error)
@@ -141,9 +148,39 @@ async function rebuildDB(){
     }
 }
 
+const userInfo = {
+    username: "Andrew Crow",
+    password: "123456789",
+    email: "glamgal@ymail.com"
+}
+
+const updatedUserInfo = {
+    username: "allyson",
+    password: "allygirl55",
+    email: "allyson@gmail.com"
+}
+
 async function testDB() {
     try {
         console.log("Starting to test database...")
+
+        const createdUser = await createUser(userInfo)
+        console.log("create user", createdUser)
+
+        const updatedUser = await updateUser(3, updatedUserInfo)
+        console.log("updated user", updatedUser)
+
+        const allUsers = await getAllUsers()
+        console.log("all users", allUsers)
+
+        const obtainUser = await getUser({username: "JohnDoe", password: "doeboy"})
+        console.log("one user", obtainUser)
+
+        const userByUsername = await getUserByUsername('JaneDoe')
+        console.log("I am the username", userByUsername)
+
+        const userByUserId = await getUserByUserId(3)
+        console.log("user by ID", userByUserId)
 
         const allBooks = await getAllBooks()
         console.log("all books:",allBooks);
