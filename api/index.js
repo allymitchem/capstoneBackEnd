@@ -18,5 +18,7 @@ apiRouter.use((error, req, res, next)=> {
 const itemsRouter = require('./items')
 apiRouter.use('/items', itemsRouter)
 
+const usersRouter = require ('./users')
+apiRouter.use('/users', usersRouter)
 
 module.exports = apiRouter;
