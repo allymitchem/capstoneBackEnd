@@ -1,12 +1,12 @@
 const client = require('./client');
 
-async function addBook({title, author, description, price, year}) {
+async function addBook({title, author, description, price, year, numInStock}) {
     try {
         const {rows: [book]} = await client.query(`
-            INSERT INTO items(title, author, description, year, price)
-            VALUES ($1, $2, $3, $4, $5)
+            INSERT INTO items(title, author, description, year, price, "numInStock")
+            VALUES ($1, $2, $3, $4, $5, $6)
             RETURNING *;
-        `, [title, author, description, year, price])
+        `, [title, author, description, year, price, numInStock])
         return book
     } catch (error) {
         console.error(error)

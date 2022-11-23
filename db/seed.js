@@ -1,8 +1,7 @@
 const client = require('./client');
 const {addBook, getAllBooks, getBooksByAuthor, getBookByTitle, getBookById} = require('./');
 const { getAllUsers,createUser,updateUser} = require('./users')
-const { fs } = require('file-system');
-const csvParser = require('csv-parser');
+
 
 
 
@@ -34,7 +33,8 @@ async function createTables(){
             author VARCHAR(255) NOT NULL,
             description TEXT NOT NULL,
             year INTEGER,
-            price INTEGER NOT NULL
+            price INTEGER NOT NULL,
+            "numInStock" INTEGER NOT NULL
         );
         CREATE TABLE users(
             id SERIAL PRIMARY KEY,
@@ -84,45 +84,29 @@ async function populateItems() {
         author: "dr. suess", 
         description: "test test test", 
         price: 1000, 
-        year: 1950
+        year: 1950,
+        numInStock: 8
     })
     await addBook({
         title: "green eggs and ham", 
         author: "dr. suess", 
         description: "test test test", 
         price: 800, 
-        year: 1930
+        year: 1930,
+        numInStock: 5
     })
     await addBook({
         title: "a different book", 
         author: "someone", 
         description: "test test test", 
         price: 800, 
-        year: 1930
+        year: 1930, 
+        numInStock: 3
     })
 }
-const books = [];
 
-async function populateItemsfromCSV() {
-    console.log('Starting to populate books');
-    let stop = false
-    const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-    const csv = require('csv-parser')
-    const stream = fs.createReadStream('./db/goodreads_library_export.csv').pipe(csv())
-      .on('data', async (data) => {
-        books.push(data)
-        })
-      .on('finish', () => {console.log(performance.now(), console.log(books), "THE STREAM HAS ENDED")})
-       const bookadded = await Promise.all(books.map((data)=> addBook({
-            title: data.Title,
-            author: data.Author,
-            description: lorem,
-            price: Math.floor(Math.random()*1001)+1,
-            year: Number(data['Original Publication Year'])
-    
-        })))
-    console.log(performance.now(),bookadded,'Finished populating books');
-}
+
+
 
 
 async function rebuildDB(){
@@ -130,7 +114,6 @@ async function rebuildDB(){
         client.connect();
         await dropTables()
         await createTables()
-        // await populateItemsfromCSV()
         await populateItems()
         await createInitialUsers()
         
