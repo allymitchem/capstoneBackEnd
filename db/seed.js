@@ -111,7 +111,7 @@ async function populateItems() {
 
 async function rebuildDB(){
     try{
-        client.connect();
+        // client.connect();
         await dropTables()
         await createTables()
         await populateItems()
