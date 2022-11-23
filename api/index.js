@@ -1,6 +1,7 @@
 const express = require('express')
 const apiRouter = express.Router();
 
+
 const jwt = require('jsonwebtoken');
 const {getUserById} = require('../db');
 const {JWT_SECRET} = process.env;
@@ -14,6 +15,8 @@ apiRouter.use((error, req, res, next)=> {
     })
 })
 
+const itemsRouter = require('./items')
+apiRouter.use('/items', itemsRouter)
 
 
 module.exports = apiRouter;
