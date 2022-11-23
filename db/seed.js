@@ -143,7 +143,7 @@ async function testDB() {
         await updateBook({id: 3, author:"another guy"})
         const newBook3= await getBookById(3)
         console.log(newBook3, "this is updated book 3")
-
+        console.log("finished testing database")
     } catch (error) {
         console.error(error);
         throw error;
@@ -153,4 +153,7 @@ async function testDB() {
 rebuildDB()
 .then(testDB)
 .catch(console.error)
-.finally(() => client.end());
+.finally(() => {
+    console.log("this is another log")
+    
+    client.end()});
