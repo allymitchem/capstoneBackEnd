@@ -1,5 +1,6 @@
 const express = require("express")
 const itemsRouter = express.Router()
+
 const {getAllBooks, getBookById, updateBook, addBook} = require('../db')
 
 itemsRouter.get("", async (req, res, next) => {
@@ -42,14 +43,6 @@ itemsRouter.post("", async (req, res, next) => {
         next({error, name, message})
     }
 })
-
-
-
-
-
-
-
-
 
 
 module.exports = itemsRouter
