@@ -17,6 +17,8 @@ async function getAllUsers() {
   }
 }
 
+
+//STILL NEEDING TO PREVENT CREATION OF USER WITH SAME EMAIL
 async function createUser({ username, password, email }) {
   const SALT_COUNT = 12;
   const hashedPassword = await bcrypt.hash(password, SALT_COUNT);

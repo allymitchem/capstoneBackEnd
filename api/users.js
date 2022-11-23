@@ -34,6 +34,25 @@ usersRouter.get("/login", async  (req, res, next) => {
         next(error)
     }
     
+    usersRouter.post("/register", async (req, res, next) => {
+
+        const { username, password, email } = req.body;
+
+        if (!username || !password || !email) {
+            next({
+                name: "MissingCredentialsError",
+                message: "Please supply username, password and email"
+            })
+        }
+        
+        if (password.length < 8) {
+            next({
+              name: "PasswordLengthError",
+              message: "Password Too Short!",
+            });
+          }
+
+    })
 })
 
 
