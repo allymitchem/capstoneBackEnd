@@ -12,6 +12,7 @@ usersRouter.use("",  (req, res, next) => {
 //need to create paths from users
 // users/login, /register, /id, /admin
 
+
 usersRouter.get("/login", async  (req, res, next) => {
     const {username, password} = req.body
  if ( !username || !password){
@@ -21,7 +22,6 @@ usersRouter.get("/login", async  (req, res, next) => {
     })
  }
     try {
-        console.log("I am here")
         const user = await getUser({username, password})
 
         if (user){
@@ -32,7 +32,6 @@ usersRouter.get("/login", async  (req, res, next) => {
                 name:"IncorrectCredentialsError",
                 message:"Username or password is incorrect"          
             })
-
         }
     } catch(error){
         console.log(error)
