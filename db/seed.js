@@ -1,6 +1,6 @@
 const client = require('./client');
 
-const { getAllUsers,createUser, getUserByUsername, getUser, getUserByUserId, updateUser} = require('./users')
+const { getAllUsers,createUser, getUserByUsername, getUser, getUserByUserId, updateUser, getUserByEmail} = require('./users')
 const {addBook, getAllBooks, getBooksByAuthor, getBookByTitle, getBookById, updateBook} = require('./');
 
 
@@ -166,6 +166,9 @@ async function testDB() {
 
         const userByUserId = await getUserByUserId(3)
         console.log("user by ID", userByUserId)
+
+        const userByEmail = await getUserByEmail("johndoe@gmail.com")
+        console.log("user by email", userByEmail)
 
         const allBooks = await getAllBooks()
         console.log("all books:",allBooks);

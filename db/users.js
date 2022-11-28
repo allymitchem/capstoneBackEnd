@@ -119,7 +119,7 @@ async function getUserByUsername(username) {
     `,
       [username]
     );
-
+      console.log(user, "Looking for an email key")
     return user;
   } catch (error) {
     throw error;
@@ -145,11 +145,27 @@ async function getUserByUserId(userId) {
   }
 }
 
+async function getUserByEmail(email) {
+
+  try {
+    const {rows: [user]} = await client.query(`
+    SELECT *
+    FROM users
+    WHERE email = $1
+    `, [email])
+
+    return user
+  } catch (error) {
+    throw error
+  }
+} 
+
 module.exports = {
   getAllUsers,
   createUser,
   updateUser,
   getUserByUsername,
   getUser,
-  getUserByUserId
+  getUserByUserId,
+  getUserByEmail
 };
