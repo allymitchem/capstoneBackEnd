@@ -79,7 +79,7 @@ usersRouter.post("/register", async (req, res, next) => {
         }
     })
     
-
+//Need to create route to access get all users. This will be a get request that requires user ID 1 to view admin tab in the nav link on the front end.
 
 
 
