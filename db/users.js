@@ -30,7 +30,7 @@ async function createUser({ username, password, email }) {
       `
       INSERT INTO users(username, password, email)
       VALUES($1, $2, $3)
-      ON CONFLICT (username) DO NOTHING
+      
       RETURNING *;
     `,
       [username, hashedPassword, email]
@@ -45,8 +45,15 @@ async function createUser({ username, password, email }) {
 }
 
 async function updateUser(id, fields = {}) {
-  console.log("I am in updateUser function", fields)
-  const setString = Object.keys(fields)
+  const SALT_COUNT = 12;
+  const hashedPassword = await bcrypt.hash(fields.password, SALT_COUNT);
+ 
+  
+ 
+  const updatedObj = {username: fields.username, password:hashedPassword, email:fields.email}
+
+
+  const setString = Object.keys(updatedObj)
     .map((key, index) => `"${key}"=$${index + 1}`)
     .join(", ");
   console.log("I am set String", setString);
@@ -65,9 +72,11 @@ async function updateUser(id, fields = {}) {
       WHERE id=${id}
       RETURNING *;
       `,
-      Object.values(fields)
+      Object.values(updatedObj)
     );
-      console.log(user)
+     
+    delete user.password;
+  
     return user;
   } catch (error) {
     throw error;
