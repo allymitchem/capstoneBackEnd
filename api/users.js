@@ -7,6 +7,7 @@ const {getUserByUsername, getUser} = require("../db")
 //need to create paths from users
 // users/login, /register, /id, /admin
 
+
 usersRouter.get("/login", async  (req, res, next) => {
     const {username, password} = req.body
  if ( !username || !password){
