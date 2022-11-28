@@ -33,6 +33,7 @@ async function createTables(){
             id SERIAL PRIMARY KEY,
             title VARCHAR(255) UNIQUE NOT NULL,
             author VARCHAR(255) NOT NULL,
+            "imageURL" VARCHAR(255),
             description TEXT NOT NULL,
             year INTEGER,
             price INTEGER NOT NULL,
@@ -94,7 +95,8 @@ async function populateItems() {
         description: "test test test", 
         price: 1000, 
         year: 1950,
-        numInStock: 8
+        numInStock: 8,
+        imageURL: "https://res.cloudinary.com/fsa2/image/upload/v1669607223/books/TheGreatGatsby.jpg"
     })
     await addBook({
         title: "green eggs and ham", 
@@ -102,7 +104,8 @@ async function populateItems() {
         description: "test test test", 
         price: 800, 
         year: 1930,
-        numInStock: 5
+        numInStock: 5,
+        imageURL: "https://res.cloudinary.com/fsa2/image/upload/v1669607210/books/theCatcherInTheRye.jpg"
     })
     await addBook({
         title: "a different book", 
@@ -110,7 +113,8 @@ async function populateItems() {
         description: "test test test", 
         price: 800, 
         year: 1930, 
-        numInStock: 3
+        numInStock: 3,
+        imageURL: "https://res.cloudinary.com/fsa2/image/upload/v1669607111/books/WutheringHeights.jpg"
     })
 }
 
