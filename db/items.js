@@ -1,12 +1,12 @@
 const client = require('./client');
 
-async function addBook({title, author, description, price, year, numInStock}) {
+async function addBook({title, author, description, price, year, numInStock, imageURL}) {
     try {
         const {rows: [book]} = await client.query(`
-            INSERT INTO items(title, author, description, year, price, "numInStock")
-            VALUES ($1, $2, $3, $4, $5, $6)
+            INSERT INTO items(title, author, description, year, price, "numInStock", "imageURL")
+            VALUES ($1, $2, $3, $4, $5, $6, $7)
             RETURNING *;
-        `, [title, author, description, year, price, numInStock])
+        `, [title, author, description, year, price, numInStock, imageURL])
         return book
     } catch (error) {
         console.error(error)
@@ -85,12 +85,10 @@ async function updateBook({id, ...fields}) {
         WHERE id=${id}
         RETURNING *;
         `, Object.values(fields));
+        return book
     } catch (error) {
-        console.error(error)
-        
+        console.error(error)        
     } 
-
-
 }
 
 

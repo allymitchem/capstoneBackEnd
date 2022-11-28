@@ -16,7 +16,6 @@ usersRouter.get("/login", async  (req, res, next) => {
     })
  }
     try {
-        console.log("I am here")
         const user = await getUser({username, password})
 
         if (user){
@@ -27,7 +26,6 @@ usersRouter.get("/login", async  (req, res, next) => {
                 name:"IncorrectCredentialsError",
                 message:"Username or password is incorrect"          
             })
-
         }
     } catch(error){
         console.log(error)
