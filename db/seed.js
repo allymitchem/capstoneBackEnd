@@ -1,7 +1,7 @@
 const client = require('./client');
 
 const { getAllUsers,createUser, getUserByUsername, getUser, getUserByUserId, updateUser} = require('./users')
-const {addBook, getAllBooks, getBooksByAuthor, getBookByTitle, getBookById, updateBook} = require('./');
+const {addBook, getAllBooks, getBooksByAuthor, getBookByTitle, getBookById, updateBook, addCart} = require('./');
 
 
 
@@ -116,6 +116,10 @@ async function populateItems() {
         numInStock: 3,
         imageURL: "https://res.cloudinary.com/fsa2/image/upload/v1669607111/books/WutheringHeights.jpg"
     })
+}
+
+async function populateCarts() {
+    await addCart(2)
 }
 
 
