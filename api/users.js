@@ -2,7 +2,8 @@ const express = require("express")
 const usersRouter = express.Router()
 const jwt = require("jsonwebtoken")
 const { JWT_SECRET}= process.env
-const {getUserByUsername, getUser, createUser, getUserByEmail} = require("../db")
+const {getUserByUsername, getUser, createUser, getUserByEmail, getAllUsers} = require("../db")
+const {requireUser} = require("./utils")
 
 usersRouter.use("",  (req, res, next) => {
     console.log("request had been made to users")
@@ -11,7 +12,23 @@ usersRouter.use("",  (req, res, next) => {
 
 //need to create paths from users
 // users/login, /register, /id, /admin
+usersRouter.get("", requireUser, async  (req, res, next) => {
 
+    try {
+        if (req.user.id == 1){
+            const allUsers = await getAllUsers()
+            res.send(allUsers)
+        }  else {
+            next({
+                name: "NotAuthorizedError",
+                message: "You are not authorized to view this page"
+            })
+        }
+    }catch(error){
+        console.log(error)
+        next(error)
+    }
+})
 
 usersRouter.get("/login", async  (req, res, next) => {
     const {username, password} = req.body

@@ -289,11 +289,11 @@ async function testDB() {
     try {
         console.log("Starting to test database...")
 
-        // const createdUser = await createUser(userInfo)
-        // console.log("create user", createdUser)
+        const createdUser = await createUser(userInfo)
+        console.log("create user", createdUser)
 
-        // const updatedUser = await updateUser(3, updatedUserInfo)
-        // console.log("updated user", updatedUser)
+        const updatedUser = await updateUser(3, updatedUserInfo)
+        console.log("updated user", updatedUser)
 
         // const allUsers = await getAllUsers()
         // console.log("all users", allUsers)
