@@ -101,6 +101,52 @@ async function deleteCartItem(cartItemId) {
     }
 }
 
+async function deleteCart(cartId) {
+    try {
+        await client.query(`
+            DELETE FROM cart_items
+            WHERE "cartId"=$1
+        ;`, [cartId])
+        
+        const {rows: [cart]} = await client.query(`
+            DELETE FROM carts
+            WHERE id=$1
+            RETURNING *
+        ;`, [cartId])
+
+        return cart
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+async function updateCart({cartId, ...fields}) {
+    try {
+        const setStr = Object.keys(fields).map((key, index) => `"${key}"=$${index + 1}`).join(', ');
+        const {rows: [updatedCart]} = await client.query(`
+            UPDATE carts
+            SET ${setStr}
+            WHERE id=${cartId}
+            RETURNING *;
+        ;`, Object.values(fields))
+        return updatedCart
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+async function updateCartItem({cartItemId, quantity}) {
+    try {
+        const {rows: [updatedCartItem]} = await client.query(`
+            UPDATE cart_items
+            SET quantity = $1
+            WHERE id=${cartItemId}
+            RETURNING *
+        ;`, [quantity])
+    } catch (error) {
+        console.error(error);
+    }
+}
 
 
 module.exports = {
@@ -109,5 +155,8 @@ module.exports = {
     getBooksInCart,
     getCart,
     getCartWithBooks,
-    deleteCartItem
+    deleteCart,
+    deleteCartItem,
+    updateCart,
+    updateCartItem
 }

@@ -1,7 +1,7 @@
 const client = require('./client');
 
 const { getAllUsers,createUser, getUserByUsername, getUser, getUserByUserId, updateUser} = require('./users')
-const {addBook, getAllBooks, getBooksByAuthor, getBookByTitle, getBookById, updateBook, createCart, addBooktoCart, getBooksInCart, getCart, getCartWithBooks, deleteCartItem} = require('./');
+const {addBook, getAllBooks, getBooksByAuthor, getBookByTitle, getBookById, updateBook, createCart, addBooktoCart, getBooksInCart, getCart, getCartWithBooks, deleteCartItem, deleteCart} = require('./');
 
 
 async function dropTables() {
@@ -214,7 +214,9 @@ async function testDB() {
         const cart1withbooks = await getCartWithBooks(1)
         console.log("this is cart #1 with its books", cart1withbooks);
 
-        //test delete cart stuff
+        const deletedCart = await deleteCart(1)
+        console.log(deletedCart);
+
     } catch (error) {
         console.error(error);
         throw error;
