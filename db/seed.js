@@ -1,7 +1,7 @@
 const client = require('./client');
 
 const { getAllUsers,createUser, getUserByUsername, getUser, getUserByUserId, updateUser} = require('./users')
-const {addBook, getAllBooks, getBooksByAuthor, getBookByTitle, getBookById, updateBook, createCart, addBooktoCart, getBooksInCart, getCart, getCartWithBooks, deleteCartItem, deleteCart, updateCart, updateCartItem} = require('./');
+const {addBook, getAllBooks, getBooksByAuthor, getBookByTitle, getBookById, updateBook, createCart, addBooktoCart, getBooksInCart, getCart, getCartWithBooks, deleteCartItem, deleteCart, updateCart, updateCartItem, getActiveCarts} = require('./');
 
 
 async function dropTables() {
@@ -118,6 +118,9 @@ async function populateItems() {
 async function populateCarts() {
     await createCart(1)
     await createCart(2)
+    await createCart(2)
+    await createCart(2)
+    await createCart(2)
 
     await addBooktoCart({
         itemId: 1, 
@@ -134,6 +137,21 @@ async function populateCarts() {
     await addBooktoCart({
         itemId: 2, 
         cartId: 2, 
+        quantity: 1
+    })
+    await addBooktoCart({
+        itemId: 2, 
+        cartId: 3, 
+        quantity: 1
+    })
+    await addBooktoCart({
+        itemId: 2, 
+        cartId: 4, 
+        quantity: 1
+    })
+    await addBooktoCart({
+        itemId: 2, 
+        cartId: 5, 
         quantity: 1
     })
 }
@@ -222,6 +240,9 @@ async function testDB() {
 
         const updatedCartItem = await updateCartItem({cartItemId: 2, quantity: 6})
         console.log("this is the updated quantity", updatedCartItem)
+
+        const activeCarts = await getActiveCarts()
+        console.log("this is all active cart ids", activeCarts)
 
     } catch (error) {
         console.error(error);

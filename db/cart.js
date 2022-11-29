@@ -149,6 +149,23 @@ async function updateCartItem({cartItemId, quantity}) {
     }
 }
 
+async function getActiveCarts(){
+    try {
+        const { rows: cartNumbers} = await client.query(`
+            SELECT id FROM carts
+            WHERE active=true
+        `)
+       
+        const cartList = cartNumbers.map(element => {
+            return getCartWithBooks(element.id)
+        })
+        return Promise.all(cartList)
+
+    } catch (error) {
+        
+    }
+}
+
 
 module.exports = {
     createCart,
@@ -159,5 +176,6 @@ module.exports = {
     deleteCart,
     deleteCartItem,
     updateCart,
-    updateCartItem
+    updateCartItem,
+    getActiveCarts
 }
