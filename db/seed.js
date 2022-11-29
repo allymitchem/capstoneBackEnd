@@ -1,5 +1,5 @@
 const client = require('./client');
-const {addBook, getAllBooks, getBooksByAuthor, getBookByTitle, getBookById, updateBook, createCart, addBooktoCart, getBooksInCart, getCart, getCartWithBooks, deleteCartItem, deleteCart, updateCart, updateCartItem, getActiveCarts} = require('./');
+const {addBook, getAllBooks, getBooksByAuthor, getBookByTitle, getBookById, updateBook, createCart, addBooktoCart, getBooksInCart, getCart, getCartWithBooks, deleteCartItem, deleteCart, updateCart, updateCartItem, getActiveCarts, getCartByUser} = require('./');
 const { getAllUsers,createUser, getUserByUsername, getUser, getUserByUserId, updateUser, getUserByEmail} = require('./users')
 
 
@@ -76,6 +76,21 @@ async function createInitialUsers(){
         username: "JaneDoe",
         password: "doegirl",
         email: "janedoe@yahoo.com"
+    })
+    const kaylan = await createUser({
+        username: "Kaylan",
+        password: "itsme",
+        email: "kaylan@yahoo.com"
+    })
+    const forrest = await createUser({
+        username: "Forrest",
+        password: "forrest123",
+        email: "forrest@yahoo.com"
+    })
+    const lisa = await createUser({
+        username: "LisaG",
+        password: "lisa123",
+        email: "lisa@yahoo.com"
     })
 
     console.log("Finished creating initial user!")
@@ -219,9 +234,10 @@ async function populateItems() {
 async function populateCarts() {
     await createCart(1)
     await createCart(2)
-    await createCart(2)
-    await createCart(2)
-    await createCart(2)
+    await createCart(3)
+    await createCart(4)
+    await createCart(5)
+  
 
     await addBooktoCart({
         itemId: 5, 
@@ -289,11 +305,11 @@ async function testDB() {
     try {
         console.log("Starting to test database...")
 
-        const createdUser = await createUser(userInfo)
-        console.log("create user", createdUser)
+        // const createdUser = await createUser(userInfo)
+        // console.log("create user", createdUser)
 
-        const updatedUser = await updateUser(3, updatedUserInfo)
-        console.log("updated user", updatedUser)
+        // const updatedUser = await updateUser(3, updatedUserInfo)
+        // console.log("updated user", updatedUser)
 
         // const allUsers = await getAllUsers()
         // console.log("all users", allUsers)
@@ -347,6 +363,9 @@ async function testDB() {
 
         // const activeCarts = await getActiveCarts()
         // console.log("this is all active cart ids", activeCarts)
+
+        const userCarts = await getCartByUser(3)
+        console.log("this is user 3's cart", userCarts)
 
     } catch (error) {
         console.error(error);
