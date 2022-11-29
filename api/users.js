@@ -30,7 +30,7 @@ usersRouter.get("", requireUser, async  (req, res, next) => {
     }
 })
 
-usersRouter.get("/login", async  (req, res, next) => {
+usersRouter.post("/login", async  (req, res, next) => {
     const {username, password} = req.body
  if ( !username || !password){
     next({
