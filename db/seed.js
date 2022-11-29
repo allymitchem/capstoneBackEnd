@@ -1,7 +1,8 @@
 const client = require('./client');
-
-const { getAllUsers,createUser, getUserByUsername, getUser, getUserByUserId, updateUser} = require('./users')
 const {addBook, getAllBooks, getBooksByAuthor, getBookByTitle, getBookById, updateBook, createCart, addBooktoCart, getBooksInCart, getCart, getCartWithBooks, deleteCartItem, deleteCart, updateCart, updateCartItem, getActiveCarts} = require('./');
+const { getAllUsers,createUser, getUserByUsername, getUser, getUserByUserId, updateUser, getUserByEmail} = require('./users')
+
+
 
 
 async function dropTables() {
@@ -206,8 +207,11 @@ async function testDB() {
         // const userByUserId = await getUserByUserId(3)
         // console.log("user by ID", userByUserId)
 
-        // const allBooks = await getAllBooks()
-        // console.log("all books:",allBooks);
+        const userByEmail = await getUserByEmail("johndoe@gmail.com")
+        console.log("user by email", userByEmail)
+
+        const allBooks = await getAllBooks()
+        console.log("all books:",allBooks);
         
         // const someBooks = await getBooksByAuthor("dr. suess")
         // console.log("some books:",someBooks);
