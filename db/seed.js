@@ -1,8 +1,7 @@
 const client = require('./client');
-
-
+const {addBook, getAllBooks, getBooksByAuthor, getBookByTitle, getBookById, updateBook, createCart, addBooktoCart, getBooksInCart, getCart, getCartWithBooks, deleteCartItem, deleteCart, updateCart, updateCartItem, getActiveCarts} = require('./');
 const { getAllUsers,createUser, getUserByUsername, getUser, getUserByUserId, updateUser, getUserByEmail} = require('./users')
-const {addBook, getAllBooks, getBooksByAuthor, getBookByTitle, getBookById, updateBook, createCart, addBooktoCart, getBooksInCart, getCart, getCartWithBooks, deleteCartItem} = require('./');
+
 
 
 
@@ -120,6 +119,9 @@ async function populateItems() {
 async function populateCarts() {
     await createCart(1)
     await createCart(2)
+    await createCart(2)
+    await createCart(2)
+    await createCart(2)
 
     await addBooktoCart({
         itemId: 1, 
@@ -136,6 +138,21 @@ async function populateCarts() {
     await addBooktoCart({
         itemId: 2, 
         cartId: 2, 
+        quantity: 1
+    })
+    await addBooktoCart({
+        itemId: 2, 
+        cartId: 3, 
+        quantity: 1
+    })
+    await addBooktoCart({
+        itemId: 2, 
+        cartId: 4, 
+        quantity: 1
+    })
+    await addBooktoCart({
+        itemId: 2, 
+        cartId: 5, 
         quantity: 1
     })
 }
@@ -219,7 +236,18 @@ async function testDB() {
         const cart1withbooks = await getCartWithBooks(1)
         console.log("this is cart #1 with its books", cart1withbooks);
 
-        //test delete cart stuff
+        // const deletedCart = await deleteCart(1)
+        // console.log(deletedCart);
+
+        const updatedCart = await updateCart( {cartId: 1, active: false})
+        console.log("this is the updated cart", updatedCart)
+
+        const updatedCartItem = await updateCartItem({cartItemId: 2, quantity: 6})
+        console.log("this is the updated quantity", updatedCartItem)
+
+        const activeCarts = await getActiveCarts()
+        console.log("this is all active cart ids", activeCarts)
+
     } catch (error) {
         console.error(error);
         throw error;
