@@ -21,7 +21,7 @@ usersRouter.get("", requireUser, async  (req, res, next) => {
         }  else {
             next({
                 name: "NotAuthorizedError",
-                message:"You are not authorized to view this page"
+                message: "You are not authorized to view this page"
             })
         }
     }catch(error){
