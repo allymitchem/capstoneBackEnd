@@ -143,6 +143,7 @@ async function updateCartItem({cartItemId, quantity}) {
             WHERE id=${cartItemId}
             RETURNING *
         ;`, [quantity])
+        return updatedCartItem
     } catch (error) {
         console.error(error);
     }

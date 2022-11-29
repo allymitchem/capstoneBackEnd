@@ -1,7 +1,7 @@
 const client = require('./client');
 
 const { getAllUsers,createUser, getUserByUsername, getUser, getUserByUserId, updateUser} = require('./users')
-const {addBook, getAllBooks, getBooksByAuthor, getBookByTitle, getBookById, updateBook, createCart, addBooktoCart, getBooksInCart, getCart, getCartWithBooks, deleteCartItem, deleteCart} = require('./');
+const {addBook, getAllBooks, getBooksByAuthor, getBookByTitle, getBookById, updateBook, createCart, addBooktoCart, getBooksInCart, getCart, getCartWithBooks, deleteCartItem, deleteCart, updateCart, updateCartItem} = require('./');
 
 
 async function dropTables() {
@@ -214,8 +214,14 @@ async function testDB() {
         const cart1withbooks = await getCartWithBooks(1)
         console.log("this is cart #1 with its books", cart1withbooks);
 
-        const deletedCart = await deleteCart(1)
-        console.log(deletedCart);
+        // const deletedCart = await deleteCart(1)
+        // console.log(deletedCart);
+
+        const updatedCart = await updateCart( {cartId: 1, active: false})
+        console.log("this is the updated cart", updatedCart)
+
+        const updatedCartItem = await updateCartItem({cartItemId: 2, quantity: 6})
+        console.log("this is the updated quantity", updatedCartItem)
 
     } catch (error) {
         console.error(error);
