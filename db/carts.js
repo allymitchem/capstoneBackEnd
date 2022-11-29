@@ -59,7 +59,7 @@ async function getBooksInCart(cartId) {
 
 async function getCart(cartId) {
     try {
-        const {rows: cart} = await client.query(`
+        const {rows: [cart]} = await client.query(`
             SELECT carts.*, users.username AS "creatorName"
             FROM carts
             JOIN users ON "userId" = users.id
@@ -68,6 +68,21 @@ async function getCart(cartId) {
         return cart
     } catch (error) {
         console.error(error)
+    }
+}
+
+async function getCartByUser(userId) {
+    try {
+        const {rows: carts} = await client.query(`
+            SELECT id FROM carts
+            WHERE "userId"=$1;
+        `, [userId])
+        const userCart = carts.map(element => {
+            return getCartWithBooks(element.id)
+        })
+        return Promise.all(userCart)
+    } catch (error) {
+        console.error(error)        
     }
 }
 
@@ -162,7 +177,7 @@ async function getActiveCarts(){
         return Promise.all(cartList)
 
     } catch (error) {
-        
+        console.error(error)
     }
 }
 
@@ -177,5 +192,6 @@ module.exports = {
     deleteCartItem,
     updateCart,
     updateCartItem,
-    getActiveCarts
+    getActiveCarts,
+    getCartByUser
 }

@@ -32,12 +32,12 @@ usersRouter.get("", requireUser, async  (req, res, next) => {
 
 usersRouter.post("/login", async  (req, res, next) => {
     const {username, password} = req.body
- if ( !username || !password){
-    next({
-        name: "MissingCredentialsError",
-        message: "Please supply both a username and a password"
-    })
- }
+    if ( !username || !password){
+        next({
+            name: "MissingCredentialsError",
+            message: "Please supply both a username and a password"
+        })
+    }
     try {
         const user = await getUser({username, password})
 
