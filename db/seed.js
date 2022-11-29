@@ -348,7 +348,6 @@ async function testDB() {
         // const activeCarts = await getActiveCarts()
         // console.log("this is all active cart ids", activeCarts)
 
-
     } catch (error) {
         console.error(error);
         throw error;
