@@ -2,7 +2,7 @@ const express = require("express")
 const usersRouter = express.Router()
 const jwt = require("jsonwebtoken")
 const { JWT_SECRET}= process.env
-const {getUserByUsername, getUser, createUser, getUserByEmail, getAllUsers} = require("../db")
+const {getUserByUsername, getUser, createUser, getUserByEmail, getAllUsers, getUserByUserId} = require("../db")
 const {requireUser} = require("./utils")
 
 usersRouter.use("",  (req, res, next) => {
@@ -27,6 +27,17 @@ usersRouter.get("", requireUser, async  (req, res, next) => {
         console.log(error)
         next(error)
     }
+})
+
+usersRouter.get("/me", requireUser, async (req, res, next) => {
+    const user = await getUserByUserId(req.user.id)
+    console.log(user)
+    try{
+        res.send(user)
+    } catch ({name, message}) {
+        next({name, message})
+    }
+
 })
 
 usersRouter.post("/login", async  (req, res, next) => {
@@ -85,7 +96,7 @@ usersRouter.post("/register", async (req, res, next) => {
                 const user = await createUser({username, password, email})
                 // console.log(user, "user line 64")
                 const  token = jwt.sign({id:user.id, username}, JWT_SECRET, {expiresIn: "2w"})
-                res.send({message: "Thank you for signing up!", token, user})
+                res.send({message: "Thank you for signing up! Please login.", token, user})
             }
 
         } catch(error){
