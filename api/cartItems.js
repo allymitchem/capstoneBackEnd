@@ -1,5 +1,5 @@
 const express = require('express')
-const { getCart, addBooktoCart, deleteCartItem, getCartWithBooks, getCartByUser, getActiveCartByUser, updateCartItem } = require('../db')
+const { getCart, addBookToCart, deleteCartItem, getCartWithBooks, getCartsByUser, getActiveCartByUser, updateCartItem } = require('../db')
 const cartItemsRouter = express.Router()
 const {requireUser} = require("./utils")
 
@@ -12,7 +12,7 @@ cartItemsRouter.post("/:cartId", requireUser, async (req, res, next) => {
     try {
         const cart = await getCart(cartId)
         if(cart.userId == req.user.id) {
-            const newCartItem = await addBooktoCart({itemId, cartId, quantity})
+            const newCartItem = await addBookToCart({itemId, cartId, quantity})
             console.log(newCartItem, "this is the book that was added")
             res.send(newCartItem)
 
@@ -92,14 +92,5 @@ cartItemsRouter.patch("/:cartItemId", requireUser, async (req, res, next) => {
         next({ error, name, message })
     }
 })
-
-
-
-
-
-
-
-
-
 
 module.exports = cartItemsRouter

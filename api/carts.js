@@ -1,10 +1,9 @@
 const express = require('express')
 const cartsRouter = express.Router()
-const {getActiveCarts, getCartByUser, getCart, updateCart, createCart, deleteCart} = require("../db")
+const {getActiveCarts, getCartsByUser, getCart, updateCart, createCart, deleteCart, getActiveCartByUser} = require("../db")
 const {requireUser} = require("./utils")
 
 cartsRouter.get("/", requireUser, async (req, res, next) => {
-    //this need the require user
     try {
       if (req.user.id === 1) {
           const activeCarts = await getActiveCarts()
@@ -20,12 +19,30 @@ cartsRouter.get("/", requireUser, async (req, res, next) => {
     }
   })
 
-cartsRouter.get('/:userId', requireUser, async (req, res, next) => {
+cartsRouter.get('/:userId/all', requireUser, async (req, res, next) => {
     const { userId } = req.params
     console.log(req.user.id, "is this the req user id?")
     try {
         if(req.user.id == userId || req.user.id == 1){
-            const userCart = await getCartByUser(userId)
+            const userCart = await getCartsByUser(userId)
+            res.send(userCart)
+        } else {
+            next({
+                name: "UnauthorizedUser",
+                message: `Not authorized.`
+              })
+        }
+    } catch ({ error, name, message }) {
+        next({ error, name, message })
+    }
+})
+
+cartsRouter.get('/:userId', requireUser, async (req, res, next) => {
+    const { userId } = req.params
+
+    try {
+        if(req.user.id == userId || req.user.id == 1){
+            const userCart = await getActiveCartByUser(userId)
             res.send(userCart)
         } else {
             next({
@@ -39,7 +56,7 @@ cartsRouter.get('/:userId', requireUser, async (req, res, next) => {
 })
 
 cartsRouter.post("", requireUser, async (req, res, next) => {
-    const userCarts = await getCartByUser(req.user.id)
+    const userCarts = await getCartsByUser(req.user.id)
     const activeCart = userCarts.find((elem) => elem.active === true)
     console.log(activeCart);
     if (activeCart) {
