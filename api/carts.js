@@ -3,7 +3,8 @@ const cartsRouter = express.Router()
 const {getActiveCarts, getCartByUser, getCart, updateCart, createCart, deleteCart} = require("../db")
 const {requireUser} = require("./utils")
 
-cartsRouter.get("/", async (req, res, next) => {
+cartsRouter.get("/", requireUser, async (req, res, next) => {
+    //this need the require user
     try {
       if (req.user.id === 1) {
           const activeCarts = await getActiveCarts()
