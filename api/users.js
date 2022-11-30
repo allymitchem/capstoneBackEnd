@@ -13,7 +13,6 @@ usersRouter.use("",  (req, res, next) => {
 //need to create paths from users
 // users/login, /register, /id, /admin
 usersRouter.get("", requireUser, async  (req, res, next) => {
-
     try {
         if (req.user.id == 1){
             const allUsers = await getAllUsers()

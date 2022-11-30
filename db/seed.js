@@ -46,7 +46,8 @@ async function createTables(){
         CREATE TABLE carts(
             id SERIAL PRIMARY KEY,
             "userId" INTEGER REFERENCES users(id),
-            active BOOLEAN DEFAULT true
+            active BOOLEAN DEFAULT true,
+            UNIQUE ("userId", active)
         );
         CREATE TABLE cart_items(
             id SERIAL PRIMARY KEY,
@@ -367,8 +368,15 @@ async function testDB() {
         // const userCarts = await getCartByUser(3)
         // console.log("this is user 3's cart", userCarts)
 
-        const userActiveCart = await getActiveCartByUser(3)
-        console.log("this is the active cart of user 3", userActiveCart)
+        await updateCart({cartId: 2, active: null})
+        
+        await createCart(2)
+    
+        await updateCart({cartId: 6, active: null})
+        
+        await createCart(2)
+        // const userActiveCart = await getActiveCartByUser(3)
+        // console.log("this is the active cart of user 3", userActiveCart)
 
     } catch (error) {
         console.error(error);
