@@ -30,6 +30,7 @@ usersRouter.get("", requireUser, async  (req, res, next) => {
 })
 
 usersRouter.get("/me", requireUser, async (req, res, next) => {
+    console.log('The users/me route was accessed');
     const user = await getUserByUserId(req.user.id)
     console.log(user)
     try{
@@ -40,7 +41,7 @@ usersRouter.get("/me", requireUser, async (req, res, next) => {
 
 })
 
-usersRouter.post("/login", async  (req, res, next) => {
+usersRouter.post("/login", async (req, res, next) => {
     const {username, password} = req.body
     if ( !username || !password){
         next({
