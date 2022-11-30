@@ -15,7 +15,7 @@ try {
 }
 }
 
-async function addBooktoCart({itemId, cartId, quantity}) {
+async function addBookToCart({itemId, cartId, quantity}) {
 
     try {
         const {rows: [cartItem]} = await client.query(`
@@ -71,7 +71,7 @@ async function getCart(cartId) {
     }
 }
 
-async function getCartByUser(userId) {
+async function getCartsByUser(userId) {
     try {
         const {rows: carts} = await client.query(`
             SELECT id FROM carts
@@ -198,7 +198,7 @@ async function getActiveCarts(){
 
 module.exports = {
     createCart,
-    addBooktoCart,
+    addBookToCart,
     getBooksInCart,
     getCart,
     getCartWithBooks,
@@ -207,6 +207,6 @@ module.exports = {
     updateCart,
     updateCartItem,
     getActiveCarts,
-    getCartByUser,
+    getCartsByUser,
     getActiveCartByUser
 }
