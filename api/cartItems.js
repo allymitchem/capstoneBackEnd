@@ -1,5 +1,5 @@
 const express = require('express')
-const { getCart, addBookToCart, deleteCartItem, getCartWithBooks, getCartsByUser, getActiveCartByUser, updateCartItem } = require('../db')
+const { getCart, addBookToCart, deleteCartItem, getCartWithBooks, getCartsByUser, getActiveCartByUser, updateCartItem, getBookById } = require('../db')
 const cartItemsRouter = express.Router()
 const {requireUser} = require("./utils")
 
@@ -14,7 +14,9 @@ cartItemsRouter.post("/:cartId", requireUser, async (req, res, next) => {
         if(cart.userId == req.user.id) {
             const newCartItem = await addBookToCart({itemId, cartId, quantity})
             console.log(newCartItem, "this is the book that was added")
-            res.send(newCartItem)
+            const itemInfo = await getBookById(newCartItem.itemId)
+            delete itemInfo.id
+            res.send({...newCartItem,...itemInfo})
 
         } else {
             next({
