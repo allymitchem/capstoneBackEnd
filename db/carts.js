@@ -16,7 +16,7 @@ try {
 }
 
 async function addBooktoCart({itemId, cartId, quantity}) {
-    //again a user check is needed here but on what level????
+
     try {
         const {rows: [cartItem]} = await client.query(`
             INSERT INTO cart_items("itemId", "cartId", quantity)
@@ -81,6 +81,20 @@ async function getCartByUser(userId) {
             return getCartWithBooks(element.id)
         })
         return Promise.all(userCart)
+    } catch (error) {
+        console.error(error)        
+    }
+}
+async function getActiveCartByUser(userId) {
+    try {
+        const {rows: [cart]} = await client.query(`
+            SELECT id FROM carts
+            WHERE "userId"=$1 AND active=true
+        `, [userId])
+        const cartId = cart.id
+        const userCart = await getCartWithBooks(cartId)
+        
+        return userCart
     } catch (error) {
         console.error(error)        
     }
@@ -193,5 +207,6 @@ module.exports = {
     updateCart,
     updateCartItem,
     getActiveCarts,
-    getCartByUser
+    getCartByUser,
+    getActiveCartByUser
 }

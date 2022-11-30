@@ -1,5 +1,5 @@
 const client = require('./client');
-const {addBook, getAllBooks, getBooksByAuthor, getBookByTitle, getBookById, updateBook, createCart, addBooktoCart, getBooksInCart, getCart, getCartWithBooks, deleteCartItem, deleteCart, updateCart, updateCartItem, getActiveCarts, getCartByUser} = require('./');
+const {addBook, getAllBooks, getBooksByAuthor, getBookByTitle, getBookById, updateBook, createCart, addBooktoCart, getBooksInCart, getCart, getCartWithBooks, deleteCartItem, deleteCart, updateCart, updateCartItem, getActiveCarts, getCartByUser, getActiveCartByUser} = require('./');
 const { getAllUsers,createUser, getUserByUsername, getUser, getUserByUserId, updateUser, getUserByEmail} = require('./users')
 
 
@@ -54,9 +54,9 @@ async function createTables(){
             "itemId" INTEGER REFERENCES items(id),
             quantity INTEGER,
             UNIQUE ("cartId", "itemId")
+
         );
         `)
-
         console.log("Finished building tables!")
     }catch (error) {
         console.log("Error building tables!")
@@ -343,14 +343,14 @@ async function testDB() {
         // console.log(newBook3, "this is updated book 3")
         // console.log("finished testing database")
 
-        // const cartlist = await getBooksInCart(1)
+        // const cartlist = await getBooksInCart(3)
         // console.log("this is a list of the items:", cartlist);
 
         // const cart1 = await getCart(1)
         // console.log("this is cart #1", cart1);
         
-        // const cart1withbooks = await getCartWithBooks(1)
-        // console.log("this is cart #1 with its books", cart1withbooks);
+        // const cart3withbooks = await getCartWithBooks(3)
+        // console.log("this is cart #3 with its books", cart3withbooks);
 
         // // const deletedCart = await deleteCart(1)
         // // console.log(deletedCart);
@@ -364,8 +364,11 @@ async function testDB() {
         // const activeCarts = await getActiveCarts()
         // console.log("this is all active cart ids", activeCarts)
 
-        const userCarts = await getCartByUser(3)
-        console.log("this is user 3's cart", userCarts)
+        // const userCarts = await getCartByUser(3)
+        // console.log("this is user 3's cart", userCarts)
+
+        const userActiveCart = await getActiveCartByUser(3)
+        console.log("this is the active cart of user 3", userActiveCart)
 
     } catch (error) {
         console.error(error);

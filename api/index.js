@@ -53,4 +53,7 @@ apiRouter.use('/users', usersRouter)
 const cartsRouter = require('./carts')
 apiRouter.use('/carts', cartsRouter)
 
+const cartItemsRouter = require('./cartItems')
+apiRouter.use('/cartItems', cartItemsRouter)
+
 module.exports = apiRouter;
