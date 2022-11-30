@@ -1,5 +1,5 @@
 const client = require('./client');
-const {addBook, getAllBooks, getBooksByAuthor, getBookByTitle, getBookById, updateBook, createCart, addBooktoCart, getBooksInCart, getCart, getCartWithBooks, deleteCartItem, deleteCart, updateCart, updateCartItem, getActiveCarts, getCartByUser, getActiveCartByUser} = require('./');
+const {addBook, getAllBooks, getBooksByAuthor, getBookByTitle, getBookById, updateBook, createCart, addBookToCart, getBooksInCart, getCart, getCartWithBooks, deleteCartItem, deleteCart, updateCart, updateCartItem, getActiveCarts, getCartByUser, getActiveCartByUser} = require('./');
 const { getAllUsers,createUser, getUserByUsername, getUser, getUserByUserId, updateUser, getUserByEmail} = require('./users')
 
 
@@ -240,34 +240,34 @@ async function populateCarts() {
     await createCart(5)
   
 
-    await addBooktoCart({
+    await addBookToCart({
         itemId: 5, 
         cartId: 1, 
         quantity: 1
     })
 
-    await addBooktoCart({
+    await addBookToCart({
         itemId: 2, 
         cartId: 1, 
         quantity: 2
     })
 
-    await addBooktoCart({
+    await addBookToCart({
         itemId: 10, 
         cartId: 2, 
         quantity: 1
     })
-    await addBooktoCart({
+    await addBookToCart({
         itemId: 3, 
         cartId: 3, 
         quantity: 1
     })
-    await addBooktoCart({
+    await addBookToCart({
         itemId: 9, 
         cartId: 4, 
         quantity: 1
     })
-    await addBooktoCart({
+    await addBookToCart({
         itemId: 2, 
         cartId: 5, 
         quantity: 1
@@ -373,7 +373,7 @@ async function testDB() {
         await createCart(2)
     
         await updateCart({cartId: 6, active: null})
-        
+
         await createCart(2)
         // const userActiveCart = await getActiveCartByUser(3)
         // console.log("this is the active cart of user 3", userActiveCart)
