@@ -95,8 +95,9 @@ async function getActiveCartByUser(userId) {
             const userCart = await getCartWithBooks(cart.id)
             return userCart
         } else {
-            //need to think about what to return if a user does not have an active cart
-            return []
+            const newCart = await createCart(userId)
+            const newCartWithBooks = await getCartWithBooks(newCart.id)
+            return newCartWithBooks
         }
         
     } catch (error) {
