@@ -235,10 +235,8 @@ async function populateItems() {
 async function populateCarts() {
     await createCart(1)
     await createCart(2)
-    await createCart(3)
-    await createCart(4)
-    await createCart(5)
-  
+    await createCart(4)  
+    await createCart(3)  
 
     await addBookToCart({
         itemId: 5, 
@@ -254,22 +252,22 @@ async function populateCarts() {
 
     await addBookToCart({
         itemId: 10, 
-        cartId: 2, 
-        quantity: 1
+        cartId: 1, 
+        quantity: 5
     })
     await addBookToCart({
         itemId: 3, 
-        cartId: 3, 
-        quantity: 1
+        cartId: 2, 
+        quantity: 10
     })
     await addBookToCart({
         itemId: 9, 
-        cartId: 4, 
-        quantity: 1
+        cartId: 3, 
+        quantity: 3
     })
     await addBookToCart({
         itemId: 2, 
-        cartId: 5, 
+        cartId: 3, 
         quantity: 1
     })
 }
@@ -368,13 +366,10 @@ async function testDB() {
         // const userCarts = await getCartByUser(3)
         // console.log("this is user 3's cart", userCarts)
 
-        await updateCart({cartId: 2, active: null})
+        await updateCart({cartId: 3, active: null})
         
-        await createCart(2)
+        await createCart(4)
     
-        await updateCart({cartId: 6, active: null})
-
-        await createCart(2)
         // const userActiveCart = await getActiveCartByUser(3)
         // console.log("this is the active cart of user 3", userActiveCart)
 
