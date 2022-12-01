@@ -91,10 +91,14 @@ async function getActiveCartByUser(userId) {
             SELECT id FROM carts
             WHERE "userId"=$1 AND active=true
         `, [userId])
-        const cartId = cart.id
-        const userCart = await getCartWithBooks(cartId)
+        if (cart) {
+            const userCart = await getCartWithBooks(cart.id)
+            return userCart
+        } else {
+            //need to think about what to return if a user does not have an active cart
+            return []
+        }
         
-        return userCart
     } catch (error) {
         console.error(error)        
     }
