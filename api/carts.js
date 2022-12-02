@@ -1,6 +1,6 @@
 const express = require('express')
 const cartsRouter = express.Router()
-const {getActiveCarts, getCartsByUser, getCart, updateCart, createCart, deleteCart, getActiveCartByUser} = require("../db")
+const {getActiveCarts, getCartsByUser, getCart, updateCart, createCart, deleteCart, getActiveCartByUser, getCartWithBooks} = require("../db")
 const {requireUser} = require("./utils")
 
 cartsRouter.get("/", requireUser, async (req, res, next) => {
@@ -37,7 +37,32 @@ cartsRouter.get('/:userId/all', requireUser, async (req, res, next) => {
     }
 })
 
-cartsRouter.get('/:userId', requireUser, async (req, res, next) => {
+cartsRouter.get('/:cartId', requireUser, async (req, res, next) => {
+    const {cartId} = req.params
+    try {
+        const cart = await getCartWithBooks(cartId)
+        if (cart) {
+            if(req.user.id == cart.userId || req.user.id == 1){
+                res.send(cart)
+            } else {
+                next({
+                    error: "UnauthorizedUser",
+                    message: `Not authorized to view this cart`
+                })
+            }
+        } else {
+            res.status(404)
+            next({
+                error: "CartDoesNotExist",
+                message: `There is no cart id:${cartId}`
+            })
+        }
+    } catch ({ error, name, message }) {
+        next({ error, name, message })
+    }
+})
+
+cartsRouter.get('/active/:userId', requireUser, async (req, res, next) => {
     const { userId } = req.params
 
     try {
@@ -111,6 +136,7 @@ cartsRouter.delete('/:cartId', requireUser, async (req, res, next) => {
                 })
             }
         } else {
+            res.status(404)
             next({
                 name: "NoCart",
                 message: `No cart with that ID exists`
