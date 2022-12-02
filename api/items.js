@@ -74,27 +74,31 @@ itemsRouter.delete("/:itemId", requireUser, async (req, res, next) => {
     }
 })
 
+//better error handling here
 itemsRouter.patch("/:itemId", requireUser, async (req, res, next) => {
     const { itemId } = req.params
+    const fields = req.body
     try {
-        if (req.user.id == 1) { 
-            const book = await getBookById(itemId)
-            if(!book) {
-                next({
-                    name: "Book Not Found",
-                    message: `A book with id ${itemId} not found.`
-                })
-            } else {
-                const fields = req.body
+        const book = await getBookById(itemId)
+        if(!book) {
+            next({
+                name: "Book Not Found",
+                message: `A book with id ${itemId} not found.`
+            })
+        } else {
+            if (req.user.id == 1) { 
                 const updatedBook = await updateBook({id: itemId, ...fields})
                 res.send(updatedBook)
-            }
-        } else {
-            next({
-                name: "UnauthorizedUser",
-                message: `Only an Administrator can Update books.`
-            })
-        }  
+            } else if (JSON.stringify(Object.keys(fields)) === JSON.stringify(["numInStock"])) {
+                const updatedBook = await updateBook({id: itemId, ...fields})
+                res.send(updatedBook)
+            } else {
+                next({
+                    name: "UnauthorizedUser",
+                    message: `Only an Administrator can Update book information.`
+                })
+            }  
+        }
     } catch ({error, name, message}) {
         next({error, name, message})
     }
