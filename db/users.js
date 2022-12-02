@@ -17,7 +17,6 @@ async function getAllUsers() {
   }
 }
 
-
 //STILL NEEDING TO PREVENT CREATION OF USER WITH SAME EMAIL
 async function createUser({ username, password, email }) {
   const SALT_COUNT = 12;
@@ -47,11 +46,12 @@ async function createUser({ username, password, email }) {
 async function updateUser(id, fields = {}) {
   const SALT_COUNT = 12;
   const hashedPassword = await bcrypt.hash(fields.password, SALT_COUNT);
- 
-  
- 
-  const updatedObj = {username: fields.username, password:hashedPassword, email:fields.email}
 
+  const updatedObj = {
+    username: fields.username,
+    password: hashedPassword,
+    email: fields.email,
+  };
 
   const setString = Object.keys(updatedObj)
     .map((key, index) => `"${key}"=$${index + 1}`)
@@ -74,9 +74,9 @@ async function updateUser(id, fields = {}) {
       `,
       Object.values(updatedObj)
     );
-     
+
     delete user.password;
-  
+
     return user;
   } catch (error) {
     throw error;
@@ -85,41 +85,34 @@ async function updateUser(id, fields = {}) {
 
 async function getUser({ username, password }) {
   const user = await getUserByUsername(username);
-  const hashedPassword = user.password;
-  let passwordsMatch = await bcrypt.compare(password, hashedPassword);
+  if (user) {
+    const hashedPassword = user.password;
+    let passwordsMatch = await bcrypt.compare(password, hashedPassword);
+    
+      if (passwordsMatch) {
+        delete user.password;
+        return user;
+      } else {
+        return null;
+      }
+    } else {
+      return null
+    }
+  }
 
+
+async function getUserByUsername(username) {
   try {
     const {
       rows: [user],
     } = await client.query(
-      `
-  SELECT * 
-  FROM users
-  WHERE username = $1;
-  `,
-      [username]
-    );
-    if (passwordsMatch) {
-      delete user.password;
-      return user;
-    } else {
-      return null;
-    }
-  } catch (error) {
-    throw error;
-  }
-}
-
-async function getUserByUsername(username) {
-  try {
-    const { rows : [user] } = await client.query(
       `
     SELECT * FROM users
     WHERE username = $1;
     `,
       [username]
     );
-      console.log(user, "Looking for an email key")
+    console.log(user, "Looking for an email key");
     return user;
   } catch (error) {
     throw error;
@@ -127,38 +120,42 @@ async function getUserByUsername(username) {
 }
 
 async function getUserByUserId(userId) {
-  try { 
+  try {
     const {
-      rows: [user]
+      rows: [user],
     } = await client.query(`
     SELECT * 
     FROM users
     WHERE "id" = ${userId}
-    `)
-    if (!user){
-      return null
+    `);
+    if (!user) {
+      return null;
     }
-    delete user.password
-    return user 
-  } catch(error){
-    throw error
+    delete user.password;
+    return user;
+  } catch (error) {
+    throw error;
   }
 }
 
 async function getUserByEmail(email) {
-
   try {
-    const {rows: [user]} = await client.query(`
+    const {
+      rows: [user],
+    } = await client.query(
+      `
     SELECT *
     FROM users
     WHERE email = $1
-    `, [email])
+    `,
+      [email]
+    );
 
-    return user
+    return user;
   } catch (error) {
-    throw error
+    throw error;
   }
-} 
+}
 
 module.exports = {
   getAllUsers,
@@ -167,5 +164,5 @@ module.exports = {
   getUserByUsername,
   getUser,
   getUserByUserId,
-  getUserByEmail
+  getUserByEmail,
 };
