@@ -72,8 +72,8 @@ cartsRouter.post("", requireUser, async (req, res, next) => {
 
 cartsRouter.patch('/:cartId', requireUser, async (req, res, next) => {
     const {cartId} = req.params
-    const {active} = req.body
-    if(!active) {
+    const fields = req.body
+    if(JSON.stringify(fields) !== JSON.stringify({active: null})) {
         next({
             name: "WrongBody",
             message: "the body of the request must contain active"
@@ -82,7 +82,7 @@ cartsRouter.patch('/:cartId', requireUser, async (req, res, next) => {
     try {
         const existingCart = await getCart(cartId)
         if(req.user.id == existingCart.userId || req.user.id == 1){
-            const newCart = await updateCart({cartId, active})
+            const newCart = await updateCart({cartId, ...fields})
             res.send(newCart);
         } else {
             next({
