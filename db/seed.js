@@ -42,12 +42,12 @@ async function createTables(){
             username VARCHAR(255) UNIQUE NOT NULL,
             password VARCHAR(255) NOT NULL,
             email VARCHAR(255) UNIQUE NOT NULL,
-            firstName VARCHAR(255),
-            lastName VARCHAR(255),
-            shippingAddress VARCHAR(255),
-            cardNumber INTEGER,
+            "firstName" VARCHAR(255),
+            "lastName" VARCHAR(255),
+            "shippingAddress" VARCHAR(255),
+            "cardNumber" INTEGER,
             expiration INTEGER,
-            billingAddress VARCHAR(255)
+            "billingAddress" VARCHAR(255)
         );
         CREATE TABLE carts(
             id SERIAL PRIMARY KEY,
@@ -77,12 +77,17 @@ async function createInitialUsers(){
     const john = await createUser ({
         username: "JohnDoe",
         password: "doeboy",
-        email: "johndoe@gmail.com"
+        email: "johndoe@gmail.com",
+        firstName: "John",
+        lastName: "Doe"
+
     })
     const jane = await createUser({
         username: "JaneDoe",
         password: "doegirl",
-        email: "janedoe@yahoo.com"
+        email: "janedoe@yahoo.com",
+        firstName: "Jane",
+        lastName:"Doe"
     })
     const kaylan = await createUser({
         username: "Kaylan",

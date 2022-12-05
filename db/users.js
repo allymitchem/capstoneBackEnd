@@ -25,7 +25,7 @@ async function createUser({ username, password, email, firstName, lastName, ship
       rows: [user],
     } = await client.query(
       `
-      INSERT INTO users(username, password, email, firstName, lastName, shippingAddress, cardNumber, expiration, billingAddress)
+      INSERT INTO users(username, password, email, "firstName", "lastName", "shippingAddress", "cardNumber", expiration, "billingAddress")
       VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)
       
       RETURNING *;
@@ -49,6 +49,12 @@ async function updateUser(id, fields = {}) {
     username: fields.username,
     password: hashedPassword,
     email: fields.email,
+    firstName: fields.firstName,
+    lastName: fields.lastName,
+    shippingAddress: fields.shippingAddress,
+    cardNumber: fields.cardNumber,
+    expiration: fields.expiration,
+    billingAddress: fields.billingAddress
   };
 
   const setString = Object.keys(updatedObj)
