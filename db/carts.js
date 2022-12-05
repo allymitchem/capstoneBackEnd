@@ -85,6 +85,9 @@ async function getCartsByUser(userId) {
         console.error(error)        
     }
 }
+
+
+
 async function getActiveCartByUser(userId) {
     try {
         const {rows: [cart]} = await client.query(`
