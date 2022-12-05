@@ -9,7 +9,6 @@ async function getAllUsers() {
     FROM users;
     `
     );
-    // console.log(user, "this is all users");
     return rows;
   } catch (error) {
     console.error(error);
@@ -17,8 +16,7 @@ async function getAllUsers() {
   }
 }
 
-//STILL NEEDING TO PREVENT CREATION OF USER WITH SAME EMAIL
-async function createUser({ username, password, email }) {
+async function createUser({ username, password, email, firstName, lastName, shippingAddress, cardNumber, expiration, billingAddress}) {
   const SALT_COUNT = 12;
   const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
 
@@ -27,12 +25,12 @@ async function createUser({ username, password, email }) {
       rows: [user],
     } = await client.query(
       `
-      INSERT INTO users(username, password, email)
-      VALUES($1, $2, $3)
+      INSERT INTO users(username, password, email, firstName, lastName, shippingAddress, cardNumber, expiration, billingAddress)
+      VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)
       
       RETURNING *;
     `,
-      [username, hashedPassword, email]
+      [username, hashedPassword, email, firstName, lastName, shippingAddress, cardNumber, expiration, billingAddress]
     );
 
     delete user.password;
