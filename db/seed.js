@@ -92,17 +92,23 @@ async function createInitialUsers(){
     const kaylan = await createUser({
         username: "Kaylan",
         password: "itsme",
-        email: "kaylan@yahoo.com"
+        email: "kaylan@yahoo.com",
+        firstName: "Kaylan",
+        lastName: "Thompson"
     })
     const forrest = await createUser({
         username: "Forrest",
         password: "forrest123",
-        email: "forrest@yahoo.com"
+        email: "forrest@yahoo.com",
+        firstName: "Forrest",
+        lastName: "McCLure"
     })
     const lisa = await createUser({
         username: "LisaG",
         password: "lisa123",
-        email: "lisa@yahoo.com"
+        email: "lisa@yahoo.com",
+        firstName: "Lisa",
+        lastName: "G"
     })
 
     console.log("Finished creating initial user!")
