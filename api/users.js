@@ -2,8 +2,9 @@ const express = require("express")
 const usersRouter = express.Router()
 const jwt = require("jsonwebtoken")
 const { JWT_SECRET}= process.env
-const {getUserByUsername, getUser, createUser, getUserByEmail, getAllUsers, getUserByUserId} = require("../db")
+const {getUserByUsername, getUser, createUser, getUserByEmail, getAllUsers, getUserByUserId, updateUser} = require("../db")
 const {requireUser} = require("./utils")
+const bcrypt = require("bcrypt")
 
 usersRouter.use("",  (req, res, next) => {
     console.log("request had been made to users")
@@ -38,6 +39,37 @@ usersRouter.get("/me", requireUser, async (req, res, next) => {
     } catch ({name, message}) {
         next({name, message})
     }
+
+})
+
+usersRouter.patch("/me", requireUser, async  (req, res, next) => {
+    const userId = req.user.id 
+    console.log(userId, "this is user Id ")
+    const fields = req.body
+    console.log(fields, "this is fields")
+    const SALT_COUNT = 12;
+  const hashedPassword = await bcrypt.hash(fields.password, SALT_COUNT)
+    const updatedObj = {
+        username: fields.username,
+        password: hashedPassword,
+        email: fields.email,
+        firstName: fields.firstName,
+        lastName: fields.lastName,
+        shippingAddress: fields.shippingAddress,
+        cardNumber: fields.cardNumber,
+        expiration: fields.expiration,
+        billingAddress: fields.billingAddress
+      };
+    const updatedUser = await updateUser(userId, updatedObj)
+    if (req.user.id == updatedUser.id){
+        res.send(updatedUser)
+    } else {
+        next({
+            error:"NotAuthorizedUser",
+            message:"You are not authorized to update this user"
+        })
+    }
+    
 
 })
 
@@ -107,7 +139,7 @@ usersRouter.post("/register", async (req, res, next) => {
         }
     })
     
-//Need to create route to access get all users. This will be a get request that requires user ID 1 to view admin tab in the nav link on the front end.
+
 
 
 

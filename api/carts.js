@@ -80,6 +80,27 @@ cartsRouter.get('/active/:userId', requireUser, async (req, res, next) => {
     }
 })
 
+//  ORDER HISTORY ROUTE THAT GETS ALL INACTIVE CARTS
+cartsRouter.get('/inactive/:userId', requireUser, async (req, res, next) => {
+    const { userId } = req.params
+
+    try {
+        if(req.user.id == userId || req.user.id == 1){
+            const userCarts = await getCartsByUser(userId)
+            const inactiveCarts = userCarts.filter((elem) => elem.active === null)
+            res.send(inactiveCarts)
+        } else {
+            next({
+                name: "UnauthorizedUser",
+                message: `Not authorized.`
+              })
+        }
+    } catch ({ error, name, message }) {
+        next({ error, name, message })
+    }
+})
+// ** END **
+
 cartsRouter.post("", requireUser, async (req, res, next) => {
     const userCarts = await getCartsByUser(req.user.id)
     const activeCart = userCarts.find((elem) => elem.active === true)

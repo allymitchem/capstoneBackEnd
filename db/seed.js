@@ -41,7 +41,13 @@ async function createTables(){
             id SERIAL PRIMARY KEY,
             username VARCHAR(255) UNIQUE NOT NULL,
             password VARCHAR(255) NOT NULL,
-            email VARCHAR(255) UNIQUE NOT NULL
+            email VARCHAR(255) UNIQUE NOT NULL,
+            "firstName" VARCHAR(255),
+            "lastName" VARCHAR(255),
+            "shippingAddress" VARCHAR(255),
+            "cardNumber" INTEGER,
+            expiration INTEGER,
+            "billingAddress" VARCHAR(255)
         );
         CREATE TABLE carts(
             id SERIAL PRIMARY KEY,
@@ -71,12 +77,17 @@ async function createInitialUsers(){
     const john = await createUser ({
         username: "JohnDoe",
         password: "doeboy",
-        email: "johndoe@gmail.com"
+        email: "johndoe@gmail.com",
+        firstName: "John",
+        lastName: "Doe"
+
     })
     const jane = await createUser({
         username: "JaneDoe",
         password: "doegirl",
-        email: "janedoe@yahoo.com"
+        email: "janedoe@yahoo.com",
+        firstName: "Jane",
+        lastName:"Doe"
     })
     const kaylan = await createUser({
         username: "Kaylan",
@@ -110,7 +121,7 @@ async function populateItems() {
         price: 2000, 
         year: 1813,
         numInStock: 8,
-        imageURL: "https://res.cloudinary.com/fsa2/image/upload/v1669606944/books/PrideAndPrejudice.jpg"
+        imageURL: "https://res.cloudinary.com/fsa2/image/upload/v1670137416/books/71_NGGc4GmS_huvf54.jpg"
     })    
     await addBook({
         title: "1984", 
@@ -119,7 +130,7 @@ async function populateItems() {
         price: 2100, 
         year: 1949,
         numInStock: 5,
-        imageURL: "https://res.cloudinary.com/fsa2/image/upload/v1669606962/books/1984.jpg"
+        imageURL: "https://res.cloudinary.com/fsa2/image/upload/v1670281721/books/15ec002794a8901dfd83b2351bff7610---orwell-computer-illustration_xk1w6b.jpg"
     })   
     await addBook({
         title: "To Kill A Mockingbird", 
@@ -128,7 +139,7 @@ async function populateItems() {
         price: 1800, 
         year: 1960,
         numInStock: 6,
-        imageURL: "https://res.cloudinary.com/fsa2/image/upload/v1669606970/books/ToKillAMockingbird.jpg"
+        imageURL: "https://res.cloudinary.com/fsa2/image/upload/v1670282785/books/9781784870799-jacket-hsize_seqncw.jpg"
     })
     await addBook({
         title: "The Great Gatsby", 
@@ -137,7 +148,7 @@ async function populateItems() {
         price: 1900, 
         year: 1925,
         numInStock: 9,
-        imageURL: "https://res.cloudinary.com/fsa2/image/upload/v1669607223/books/TheGreatGatsby.jpg"
+        imageURL: "https://res.cloudinary.com/fsa2/image/upload/v1670137039/books/81n1NYzXIxL_ks5njv.jpg"
     })
     await addBook({
         title: "The Catcher in the Rye", 
@@ -146,7 +157,7 @@ async function populateItems() {
         price: 2200, 
         year: 1951,
         numInStock: 10,
-        imageURL: "https://res.cloudinary.com/fsa2/image/upload/v1669607210/books/theCatcherInTheRye.jpg"
+        imageURL: "https://res.cloudinary.com/fsa2/image/upload/v1670134928/books/thecatcherintherye_yuvuok.jpg"
     })
     await addBook({
         title: "Catch-22", 
@@ -155,7 +166,7 @@ async function populateItems() {
         price: 1500, 
         year: 1961,
         numInStock: 5,
-        imageURL: "https://res.cloudinary.com/fsa2/image/upload/v1669607195/books/catch-22.jpg"
+        imageURL: "https://res.cloudinary.com/fsa2/image/upload/v1670282588/books/1233220139-4d1d2600fc964e42dc2278685b5b855d_aunvzf.jpg"
     })
     await addBook({
         title: "Jane Eyre", 
@@ -164,7 +175,7 @@ async function populateItems() {
         price: 2200, 
         year: 1847,
         numInStock: 12,
-        imageURL: "https://res.cloudinary.com/fsa2/image/upload/v1669607090/books/JaneEyre.jpg"
+        imageURL: "https://res.cloudinary.com/fsa2/image/upload/v1670283500/books/81udJdH-X8L_trh3gm.jpg"
     })
     await addBook({
         title: "Great Expectations", 
@@ -173,7 +184,7 @@ async function populateItems() {
         price: 1500, 
         year: 1860,
         numInStock: 7,
-        imageURL: "https://res.cloudinary.com/fsa2/image/upload/v1669607099/books/GreatExpectations.jpg"
+        imageURL: "https://res.cloudinary.com/fsa2/image/upload/v1670135296/books/9780143106272_uxx3ez.jpg"
     })
     await addBook({
         title: "Wuthering Heights", 
@@ -182,7 +193,7 @@ async function populateItems() {
         price: 2200, 
         year: 1847,
         numInStock: 12,
-        imageURL: "https://res.cloudinary.com/fsa2/image/upload/v1669607111/books/WutheringHeights.jpg"
+        imageURL: "https://res.cloudinary.com/fsa2/image/upload/v1670282486/books/flat_750x_075_f-pad_750x1000_f8f8f8_epm9uy.jpg"
     })
     await addBook({
         title: "Little Women", 
@@ -191,7 +202,7 @@ async function populateItems() {
         price: 2200, 
         year: 1868,
         numInStock: 15,
-        imageURL: "https://res.cloudinary.com/fsa2/image/upload/v1669607149/books/LittleWomen.jpg"
+        imageURL: "https://res.cloudinary.com/fsa2/image/upload/v1670137208/books/9781847495877-385x600_ikxczt.jpg"
     })
     await addBook({
         title: "Animal Farm", 
@@ -200,7 +211,7 @@ async function populateItems() {
         price: 1800, 
         year: 1945,
         numInStock: 25,
-        imageURL: "https://res.cloudinary.com/fsa2/image/upload/v1669676222/books/AnimalFarm.jpg"
+        imageURL: "https://res.cloudinary.com/fsa2/image/upload/v1670282143/books/71emGmd0vtL_brkep3.jpg"
     })
     await addBook({
         title: "Anna Karenina", 
@@ -209,16 +220,16 @@ async function populateItems() {
         price: 2100, 
         year: 1878,
         numInStock: 13,
-        imageURL: "https://res.cloudinary.com/fsa2/image/upload/v1669676237/books/AnnaKarenina.jpg"
+        imageURL: "https://res.cloudinary.com/fsa2/image/upload/v1670282075/books/54138478_qgltq2.jpg"
     })
     await addBook({
-        title: "Crime and Punishment", 
+        title: "Crime & Punishment", 
         author: "Fyodor Dostoevsky", 
         description: "Raskolnikov, a destitute and desperate former student, wanders through the slums of St Petersburg and commits a random murder without remorse or regret", 
         price: 1500, 
         year: 1866,
         numInStock: 8,
-        imageURL: "https://res.cloudinary.com/fsa2/image/upload/v1669676243/books/CrimeAndPunishment.jpg"
+        imageURL: "https://res.cloudinary.com/fsa2/image/upload/v1670283227/books/41nLV5axVFL._SX321_BO1_204_203_200__ytqizh.jpg"
     })              
     await addBook({
         title: "Lord of The Flies", 
@@ -227,7 +238,7 @@ async function populateItems() {
         price: 2200, 
         year: 1954,
         numInStock: 13,
-        imageURL: "https://res.cloudinary.com/fsa2/image/upload/v1669676251/books/LordOfTheFlies.jpg"
+        imageURL: "https://res.cloudinary.com/fsa2/image/upload/v1670281830/books/9783125738041-us_oe5zbq.jpg"
     })
               
 }
