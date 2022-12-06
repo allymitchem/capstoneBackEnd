@@ -1,6 +1,6 @@
 const express = require('express')
 const cartsRouter = express.Router()
-const {getActiveCarts, getCartsByUser, getCart, updateCart, createCart, deleteCart, getActiveCartByUser, getCartWithBooks} = require("../db")
+const {getActiveCarts, getCartsByUser, getCart, updateCart, createCart, deleteCart, getActiveCartByUser, getCartWithBooks, getUserByUserId} = require("../db")
 const {requireUser} = require("./utils")
 
 cartsRouter.get("/", requireUser, async (req, res, next) => {
@@ -84,17 +84,28 @@ cartsRouter.get('/active/:userId', requireUser, async (req, res, next) => {
 cartsRouter.get('/inactive/:userId', requireUser, async (req, res, next) => {
     const { userId } = req.params
 
+
+
+
     try {
-        if(req.user.id == userId || req.user.id == 1){
-            const userCarts = await getCartsByUser(userId)
-            const inactiveCarts = userCarts.filter((elem) => elem.active === null)
-            res.send(inactiveCarts)
-        } else {
-            next({
-                name: "UnauthorizedUser",
-                message: `Not authorized.`
-              })
-        }
+            const user = await getUserByUserId(userId)
+            if(user) {
+                if(req.user.id == userId || req.user.id == 1){
+                    const userCarts = await getCartsByUser(userId)
+                    const inactiveCarts = userCarts.filter((elem) => elem.active === null)
+                    res.send(inactiveCarts)
+                } else {
+                    next({
+                        name: "UnauthorizedUser",
+                        message: `Not authorized.`
+                      })
+                }
+            } else {
+                next({
+                    name: "InvalidUserId",
+                    message: `No user with ID ${userId} exists`
+                })
+            }
     } catch ({ error, name, message }) {
         next({ error, name, message })
     }
