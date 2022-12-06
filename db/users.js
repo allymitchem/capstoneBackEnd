@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 async function getAllUsers() {
   try {
     const { rows } = await client.query(
-      `SELECT id, username, password, email
+      `SELECT id, username, password, email, "firstName", "lastName"
     FROM users;
     `
     );
