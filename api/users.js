@@ -102,12 +102,12 @@ usersRouter.post("/login", async (req, res, next) => {
 
 usersRouter.post("/register", async (req, res, next) => {
         console.log("i am working")
-        const { username, password, email } = req.body;
+        const { username, password, email, firstName, lastName } = req.body;
 
-        if (!username || !password || !email) {
+        if ( !username || !password || !email || !firstName || !lastName ) {
             next({
                 name: "MissingCredentialsError",
-                message: "Please supply username, password and email"
+                message: "Please supply first name, last name, username, password and email"
             })
         }
         
@@ -127,7 +127,7 @@ usersRouter.post("/register", async (req, res, next) => {
                     message: `Either ${username} or ${email} is already in use.`
                 })
             } else {
-                const user = await createUser({username, password, email})
+                const user = await createUser({username, password, email, firstName, lastName})
                 // console.log(user, "user line 64")
                 const  token = jwt.sign({id:user.id, username}, JWT_SECRET, {expiresIn: "2w"})
                 res.send({message: "Thank you for signing up! Please login.", token, user})
