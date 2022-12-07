@@ -35,8 +35,8 @@ itemsRouter.get("/:itemId", async (req, res, next) => {
 itemsRouter.post("", requireUser ,async (req, res, next) => {
     try {
         if (req.user.id == 1) {
-            const {title, author, description, price, year, numInStock, imageURL} = req.body 
-            const addedBook = await addBook({title, author, description, price, year, numInStock, imageURL})
+            const {title, author, description, genre, price, year, numInStock, imageURL} = req.body 
+            const addedBook = await addBook({title, author, description, genre, price, year, numInStock, imageURL})
             res.send(addedBook)
         } else {
             next({
