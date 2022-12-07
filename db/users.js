@@ -60,7 +60,6 @@ async function updateUser(id, fields = {}) {
   const setString = Object.keys(updatedObj)
     .map((key, index) => `"${key}"=$${index + 1}`)
     .join(", ");
-  console.log("I am set String", setString);
   // return early if this is called without fields
   if (setString.length === 0) {
     return;
@@ -116,7 +115,6 @@ async function getUserByUsername(username) {
     `,
       [username]
     );
-    console.log(user, "Looking for an email key");
     return user;
   } catch (error) {
     throw error;

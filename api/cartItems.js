@@ -13,7 +13,6 @@ cartItemsRouter.post("/:cartId", requireUser, async (req, res, next) => {
         const cart = await getCart(cartId)
         if(cart.userId == req.user.id) {
             const newCartItem = await addBookToCart({itemId, cartId, quantity})
-            console.log(newCartItem, "this is the book that was added")
             const itemInfo = await getBookById(newCartItem.itemId)
             delete itemInfo.id
             res.send({...newCartItem,...itemInfo})

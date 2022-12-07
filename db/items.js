@@ -48,7 +48,7 @@ async function getBookById(idNum) {
         `,[idNum])
         return books
     } catch (error) {
-        console.log(error)
+        console.error(error)
     }
 }
 
@@ -60,7 +60,7 @@ async function getBooksByAuthor(authorName) {
         `,[authorName])
         return books
     } catch (error) {
-        console.log(error)
+        console.error(error)
     }
 }
 
@@ -72,7 +72,7 @@ async function getBookByTitle(title) {
         `,[title])
         return books
     } catch (error) {
-        console.log(error)
+        console.error(error)
     }
 }
 

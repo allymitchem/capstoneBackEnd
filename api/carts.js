@@ -115,7 +115,6 @@ cartsRouter.get('/inactive/:userId', requireUser, async (req, res, next) => {
 cartsRouter.post("", requireUser, async (req, res, next) => {
     const userCarts = await getCartsByUser(req.user.id)
     const activeCart = userCarts.find((elem) => elem.active === true)
-    console.log(activeCart);
     if (activeCart) {
         next({
             name: "ExistingUserCart",

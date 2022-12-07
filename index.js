@@ -43,7 +43,7 @@ server.use((error, req, res, next) => {
 })
 
 const client = require('./db/client');
-console.log(typeof(client))
+
 client.connect();
 
 server.listen(PORT, () => {

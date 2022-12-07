@@ -25,15 +25,13 @@ usersRouter.get("", requireUser, async  (req, res, next) => {
             })
         }
     }catch(error){
-        console.log(error)
+        console.error(error)
         next(error)
     }
 })
 
 usersRouter.get("/me", requireUser, async (req, res, next) => {
-    console.log('The users/me route was accessed');
     const user = await getUserByUserId(req.user.id)
-    console.log(user)
     try{
         res.send(user)
     } catch ({name, message}) {
@@ -44,14 +42,10 @@ usersRouter.get("/me", requireUser, async (req, res, next) => {
 
 usersRouter.patch("/me", requireUser, async  (req, res, next) => {
     const userId = req.user.id 
-    console.log(userId, "this is user Id ")
     const fields = req.body
-    console.log(fields, "this is fields")
-    const SALT_COUNT = 12;
-  const hashedPassword = await bcrypt.hash(fields.password, SALT_COUNT)
     const updatedObj = {
         username: fields.username,
-        password: hashedPassword,
+        password: fields.password,
         email: fields.email,
         firstName: fields.firstName,
         lastName: fields.lastName,
@@ -82,7 +76,6 @@ usersRouter.post("/login", async (req, res, next) => {
         })
     }
     try {
-        console.log({username, password})
         const user = await getUser({username, password})
 
         if (user){
@@ -95,13 +88,11 @@ usersRouter.post("/login", async (req, res, next) => {
             })
         }
     } catch(error){
-        console.log(error)
         next(error)
     }
 })     
 
 usersRouter.post("/register", async (req, res, next) => {
-        console.log("i am working")
         const { username, password, email, firstName, lastName } = req.body;
 
         if ( !username || !password || !email || !firstName || !lastName ) {
@@ -120,7 +111,6 @@ usersRouter.post("/register", async (req, res, next) => {
         try { 
             const _user = await getUserByUsername(username)
             const _email = await getUserByEmail(email)
-            console.log(_user, "this is the user object we are looking for")
             if (_user || _email){
                 next({
                     name: "UserAlreadyExists",
@@ -128,13 +118,12 @@ usersRouter.post("/register", async (req, res, next) => {
                 })
             } else {
                 const user = await createUser({username, password, email, firstName, lastName})
-                // console.log(user, "user line 64")
                 const  token = jwt.sign({id:user.id, username}, JWT_SECRET, {expiresIn: "2w"})
                 res.send({message: "Thank you for signing up! Please login.", token, user})
             }
 
         } catch(error){
-            console.log(error)
+            console.error(error)
             next(error)
         }
     })
