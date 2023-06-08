@@ -5,3 +5,5 @@ Relies on PostgreSQL database named graceshopper-dev
 
 npm run seed will initialize the database
 npm run start will start your server locally
+
+Link to front end: https://github.com/allymitchem/capstoneFrontEnd
